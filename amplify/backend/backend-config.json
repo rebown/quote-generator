@@ -1,0 +1,77 @@
+{
+  "api": {
+    "quotegenerator": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [
+            {
+              "apiKeyConfig": {
+                "apiKeyExpirationDate": "2023-10-13T11:31:52.232Z",
+                "apiKeyExpirationDays": 7,
+                "description": "TEST API KEY"
+              },
+              "authenticationType": "API_KEY"
+            }
+          ],
+          "defaultAuthentication": {
+            "authenticationType": "AWS_IAM"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  },
+  "auth": {
+    "quotegeneratorbbf0ae7b": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
+    }
+  },
+  "function": {
+    "quotegeneratorfc9d2c46": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_quotegeneratorfc9d2c46_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "quotegeneratorfc9d2c46"
+        }
+      ]
+    },
+    "AMPLIFY_function_quotegeneratorfc9d2c46_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "quotegeneratorfc9d2c46"
+        }
+      ]
+    }
+  }
+}
