@@ -12,17 +12,17 @@
       "AmplifyAppId": "d5hla1lqljafp"
     },
     "categories": {
-      "auth": {
-        "quotegeneratorbbf0ae7b": {}
-      },
       "function": {
         "quotegeneratorfc9d2c46": {
           "deploymentBucketName": "amplify-quotegenerator-dev-134954-deployment",
-          "s3Key": "amplify-builds/quotegeneratorfc9d2c46-704d2f6244633162566c-build.zip"
+          "s3Key": "amplify-builds/quotegeneratorfc9d2c46-444c4a7634673875442f-build.zip"
         }
       },
       "api": {
         "quotegenerator": {}
+      },
+      "auth": {
+        "quotegenerator45bbedbe": {}
       }
     }
   }
