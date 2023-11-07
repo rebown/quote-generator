@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
 interface ImageBlobProps {
-  quoteReceived: String | null;
   blobUrl: string | null;
 }
 
-const ImageBlob = ({ quoteReceived, blobUrl }: ImageBlobProps) => {
+const ImageBlob = ({ blobUrl }: ImageBlobProps) => {
   if (!blobUrl) {
     return null;
   }

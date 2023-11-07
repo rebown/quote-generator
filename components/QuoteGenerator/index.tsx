@@ -34,7 +34,14 @@ export const QuoteGeneratorModal = ({
   const [blobUrl, setBlobUrl] = useState<string | null>(null);
 
   // Handling download of quote card
-  const handleDownload = () => {};
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    if (typeof blobUrl === "string") {
+      link.href = blobUrl;
+      link.download = "quote.png";
+      link.click();
+    }
+  };
 
   // Handle the receiving of quote card
   useEffect(() => {
@@ -84,7 +91,7 @@ export const QuoteGeneratorModal = ({
                   See a preview:
                 </QuoteGeneratorSubTitle>
                 <ImageBlobCon>
-                  <ImageBlob quoteReceived={quoteReceived} blobUrl={blobUrl} />
+                  <ImageBlob blobUrl={blobUrl} />
                 </ImageBlobCon>
                 <AnimatedDownloadButton handleDownload={handleDownload} />
               </>
