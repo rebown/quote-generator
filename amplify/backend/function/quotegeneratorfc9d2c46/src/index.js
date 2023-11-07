@@ -36,7 +36,7 @@ async function updateQuoteDDBObject() {
         ":inc": 1,
       },
       ExpressionAttributeNames: {
-        "#quotesGenerated": "quotsGenerated",
+        "#quotesGenerated": "quotesGenerated",
       },
       ReturnValues: "UPDATED_NEW",
     };
