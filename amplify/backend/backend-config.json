@@ -7,7 +7,7 @@
           "additionalAuthenticationProviders": [
             {
               "apiKeyConfig": {
-                "apiKeyExpirationDate": "2023-10-13T11:31:52.232Z",
+                "apiKeyExpirationDate": "2023-10-16T20:15:33.890Z",
                 "apiKeyExpirationDays": 7,
                 "description": "TEST API KEY"
               },
@@ -24,7 +24,7 @@
     }
   },
   "auth": {
-    "quotegeneratorbbf0ae7b": {
+    "quotegenerator45bbedbe": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -52,6 +52,15 @@
   "function": {
     "quotegeneratorfc9d2c46": {
       "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "quotegenerator"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }

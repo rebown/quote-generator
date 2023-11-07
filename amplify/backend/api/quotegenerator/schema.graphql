@@ -6,7 +6,7 @@ input AMPLIFY {
 type Query {
   generateAQuote(input: AWSJSON!): String
     @auth(rules: [{ allow: public, provider: iam }])
-    @function(name: "inspoquoteLambda-${env}")
+    @function(name: "quotegeneratorfc9d2c46-${env}")
 }
 
 # Public Data
