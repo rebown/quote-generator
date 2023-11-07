@@ -31,12 +31,12 @@ async function updateQuoteDDBObject() {
       Key: {
         id: quoteObjectID,
       },
-      UpdateExpression: "set #quoteGenerated = #quoteGenerated + :inc",
+      UpdateExpression: "set #quotesGenerated = #quotesGenerated + :inc",
       ExpressionAttributeValues: {
         ":inc": 1,
       },
       ExpressionAttributeNames: {
-        "#quoteGenerated": "quoteGenerated",
+        "#quotesGenerated": "quotsGenerated",
       },
       ReturnValues: "UPDATED_NEW",
     };
@@ -60,16 +60,19 @@ exports.handler = async (event) => {
     const response = await fetch(url);
     const data = await response.json();
 
+    // quote elements
     quoteAuthor = data[0].a;
     quoteText = data[0].q;
 
+    // Image construction
     const width = 750;
-    const height = 300;
+    const height = 483;
     const lineBrake = 4;
     const quoteWords = quoteText.split(" ");
     let newТеxt = "";
-    let tspanElements = "";
 
+    // Define some tspanElements w/ 4 words each
+    let tspanElements = "";
     for (let i = 0; i < quoteWords.length; i++) {
       newТеxt += quoteWords[i] + " ";
       if ((i + 1) % lineBrake === 0) {
@@ -84,6 +87,7 @@ exports.handler = async (event) => {
       tspanElements += `<tspan x="${width / 2}" dy="1.2em">${newТеxt}</tspan>`;
     }
 
+    // Construct the SVG
     const svgElement = `<svg  width="${width}" height="${height}">
     <style>
       .title {
@@ -124,7 +128,7 @@ exports.handler = async (event) => {
     const randomIndex = Math.floor(Math.random() * backgroundImages.length);
     const selectedImage = backgroundImages[randomIndex];
 
-    const timestamp = new Date().toLocaleString().replace(/[^\d]/g, "");
+    // Composite this image together
     const svgBuffer = Buffer.from(svgElement);
     const imagePath = path.join("/tmp", "quote-card.png");
     const image = await sharp(selectedImage)
