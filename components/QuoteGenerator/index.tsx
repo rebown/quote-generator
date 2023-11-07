@@ -37,7 +37,18 @@ export const QuoteGeneratorModal = ({
   const handleDownload = () => {};
 
   // Handle the receiving of quote card
-  // useEffect(() => {}, [quoteReceived]);
+  useEffect(() => {
+    if (quoteReceived) {
+      const binaryData = Buffer.from(quoteReceived, "base64");
+      const blob = new Blob([binaryData], { type: "image/png" });
+      const blobUrlGenerated = URL.createObjectURL(blob);
+      setBlobUrl(blobUrlGenerated);
+
+      return () => {
+        URL.revokeObjectURL(blobUrlGenerated);
+      };
+    }
+  }, [quoteReceived]);
 
   return (
     <Modal
