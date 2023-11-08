@@ -11,44 +11,44 @@ Amplify Params - DO NOT EDIT */
  */
 
 //AWS packages
-const AWS = require("aws-sdk");
-const docClient = new AWS.DynamoDB.DocumentClient();
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+
+const client = new DynamoDBClient({});
+const docClient = DynamoDBDocumentClient.from(client);
 
 //Image generation packages
-const sharp = require("sharp");
-const fetch = require("node-fetch");
-const path = require("path");
-const fs = require("fs");
+import sharp from "sharp";
+import fetch from "node-fetch";
+import path from "path";
+import { readFileSync } from "fs";
 
 // Function update DynamoDB table
 async function updateQuoteDDBObject() {
-  const quoteTableName = process.env.API_QUOTEGENERATOR_QUOTEAPPDATATABLE_NAME;
+  const quoteTableName = "QuoteAppData-tf32qes4vzai7fx7l4qgse2wja-devenv";
   const quoteObjectID = "321231-321321231-32213123";
 
   try {
-    const params = {
+    const command = new UpdateCommand({
       TableName: quoteTableName,
       Key: {
         "id": quoteObjectID,
       },
-      UpdateExpression: "SET #quotesGenerated = #quotesGenerated + :inc",
+      UpdateExpression: "SET quotesGenerated = quotesGenerated + :inc",
       ExpressionAttributeValues: {
-        ":inc": 1,
-      },
-      ExpressionAttributeNames: {
-        "#quotesGenerated": "quotesGenerated",
+         ":inc": 1,
       },
       ReturnValues: "UPDATED_NEW",
-    };
-
-    const updateQuoteObject = await docClient.update(params).promise();
-    return updateQuoteObject;
+    });
+  
+    return await docClient.send(command);
+    
   } catch (error) {
     console.log("Error updating an obejct in DynamoDB");
   }
 }
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
   console.log(`EVENT: ${JSON.stringify(event)}`);
 
   const quotesURL = "https://zenquotes.io/api/random";
@@ -143,7 +143,7 @@ exports.handler = async (event) => {
 
     // Update DynamoDB object in table
     try {
-      updateQuoteDDBObject();
+      await updateQuoteDDBObject();
     } catch (error) {
       console.log("Error while updating DynamoDB");
     }
@@ -154,7 +154,7 @@ exports.handler = async (event) => {
         "Content-Type": "image/png",
         "Access-Control-Allow-Headers": "*",
       },
-      body: fs.readFileSync(imagePath).toString("base64"),
+      body: readFileSync(imagePath).toString("base64"),
       isBase64Encoded: true,
     };
   }
