@@ -11,44 +11,44 @@ Amplify Params - DO NOT EDIT */
  */
 
 //AWS packages
-const AWS = require("aws-sdk");
-const docClient = new AWS.DynamoDB.DocumentClient();
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+
+const client = new DynamoDBClient({});
+const docClient = DynamoDBDocumentClient.from(client);
 
 //Image generation packages
-const sharp = require("sharp");
-const fetch = require("node-fetch");
-const path = require("path");
-const fs = require("fs");
+import sharp from "sharp";
+import fetch from "node-fetch";
+import path from "path";
+import { readFileSync } from "fs";
 
 // Function update DynamoDB table
 async function updateQuoteDDBObject() {
-  const quoteTableName = process.env.API_QUOTEGENERATOR_QUOTEAPPDATATABLE_NAME;
+  const quoteTableName = "QuoteAppData-tf32qes4vzai7fx7l4qgse2wja-devenv";
   const quoteObjectID = "321231-321321231-32213123";
 
   try {
-    const params = {
+    const command = new UpdateCommand({
       TableName: quoteTableName,
       Key: {
-        id: quoteObjectID,
+        "id": quoteObjectID,
       },
-      UpdateExpression: "set #quotesGenerated = #quotesGenerated + :inc",
+      UpdateExpression: "SET quotesGenerated = quotesGenerated + :inc",
       ExpressionAttributeValues: {
-        ":inc": 1,
-      },
-      ExpressionAttributeNames: {
-        "#quotesGenerated": "quotesGenerated",
+         ":inc": 1,
       },
       ReturnValues: "UPDATED_NEW",
-    };
-
-    const updateQuoteObject = await docClient.update(params).promise();
-    return updateQuoteObject;
+    });
+  
+    return await docClient.send(command);
+    
   } catch (error) {
     console.log("Error updating an obejct in DynamoDB");
   }
 }
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
   console.log(`EVENT: ${JSON.stringify(event)}`);
 
   const quotesURL = "https://zenquotes.io/api/random";
@@ -105,14 +105,14 @@ exports.handler = async (event) => {
          font-weight: bold;
          fill: lightgrey;
          text-anchor: middle;
-         font-family: Verdana
+         font-family="Arial, sans-serif"
       }
     </style>
     <circle cx="382" cy="76" r="44" fill="rgba(255, 255, 255, 0.155)" />
-    <text x="382" y="76" dy="50" text-anchor="middle" font-size="90" fill="white" font-family="Verdana">Hello, SVG!</text>
+    <text x="382" y="76" dy="50" text-anchor="middle" font-size="90" font-family="Arial, sans-serif" fill="white">Hello, SVG!</text>
     <g>
       <rect x="0" y="0" width="${width}" height="auto"></rect>
-      <text id="lastLineOfQuote" x="375" y="120" font-size="35" text-anchor="middle" fill="white" font-family="Verdana">
+      <text id="lastLineOfQuote" x="375" y="120" font-size="35" font-family="Arial, sans-serif" text-anchor="middle" fill="white">
       ${tspanElements}
       <tspan class="quoteAuthor" x="375" dy="1.8em">${quoteAuthor}</tspan>
       </text>
@@ -143,7 +143,7 @@ exports.handler = async (event) => {
 
     // Update DynamoDB object in table
     try {
-      updateQuoteDDBObject();
+      await updateQuoteDDBObject();
     } catch (error) {
       console.log("Error while updating DynamoDB");
     }
@@ -154,7 +154,7 @@ exports.handler = async (event) => {
         "Content-Type": "image/png",
         "Access-Control-Allow-Headers": "*",
       },
-      body: fs.readFileSync(imagePath).toString("base64"),
+      body: readFileSync(imagePath).toString("base64"),
       isBase64Encoded: true,
     };
   }
