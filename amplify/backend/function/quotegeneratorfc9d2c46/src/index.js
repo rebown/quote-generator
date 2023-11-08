@@ -29,9 +29,9 @@ async function updateQuoteDDBObject() {
     const params = {
       TableName: quoteTableName,
       Key: {
-        id: quoteObjectID,
+        "id": quoteObjectID,
       },
-      UpdateExpression: "set #quotesGenerated = #quotesGenerated + :inc",
+      UpdateExpression: "SET #quotesGenerated = #quotesGenerated + :inc",
       ExpressionAttributeValues: {
         ":inc": 1,
       },
@@ -105,13 +105,14 @@ exports.handler = async (event) => {
          font-weight: bold;
          fill: lightgrey;
          text-anchor: middle;
+         font-family="Arial, sans-serif"
       }
     </style>
     <circle cx="382" cy="76" r="44" fill="rgba(255, 255, 255, 0.155)" />
-    <text x="382" y="76" dy="50" text-anchor="middle" font-size="90" fill="white">Hello, SVG!</text>
+    <text x="382" y="76" dy="50" text-anchor="middle" font-size="90" font-family="Arial, sans-serif" fill="white">Hello, SVG!</text>
     <g>
       <rect x="0" y="0" width="${width}" height="auto"></rect>
-      <text id="lastLineOfQuote" x="375" y="120" font-size="35" text-anchor="middle" fill="white">
+      <text id="lastLineOfQuote" x="375" y="120" font-size="35" font-family="Arial, sans-serif" text-anchor="middle" fill="white">
       ${tspanElements}
       <tspan class="quoteAuthor" x="375" dy="1.8em">${quoteAuthor}</tspan>
       </text>
